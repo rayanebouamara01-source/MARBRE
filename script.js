@@ -144,3 +144,12 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     }, 500);
 });
+
+// À SUPPRIMER TOUT EN BAS DE SCRIPT.JS :
+window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        if (document.getElementById('map').innerHTML === "") {
+            initMap();
+        }
+    }, 1000);
+});
