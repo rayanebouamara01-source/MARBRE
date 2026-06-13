@@ -391,11 +391,21 @@ ul {
 }
 .main-footer .logo-text { color: #fff; }
 
-/* BUTTON FOR DIRECTIONS */
+/* DESIGN DE LA CARTE IFRAME ET DU BOUTON D'ITINÉRAIRE */
+.map-iframe {
+    width: 100%; /* Prend toute la largeur de sa colonne */
+    height: 320px; /* Hauteur harmonieuse par rapport au formulaire d'à côté */
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-top: 10px;
+    display: block;
+}
+
 .btn-directions {
     display: block;
     text-align: center;
-    background-color: #0d47a1; /* Matching your theme's brand blue color */
+    background-color: #0d47a1; /* Bleu identique à ton thème d'usine */
     color: #ffffff !important;
     padding: 12px;
     border-radius: 4px;
@@ -407,6 +417,6 @@ ul {
 }
 
 .btn-directions:hover {
-    background-color: #0a3a85; /* Darker blue on hover */
+    background-color: #0a3a85; /* Assombrissement subtil au survol */
     transform: translateY(-1px);
 }
