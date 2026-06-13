@@ -79,7 +79,7 @@ orderButtons.forEach(btn => {
     });
 });
 
-// SOUMISSION DU FORMULAIRE (SIMULATION)
+// SOUMISSION DU FORMULAIRE
 orderForm.addEventListener('submit', function(e) {
     e.preventDefault();
     
@@ -96,36 +96,4 @@ orderForm.addEventListener('submit', function(e) {
     alert(`Merci M./Mme ${clientName}.\nVotre demande d'achat pour le modèle d'usine [${model}] en finition Blanc Brillant a bien été enregistrée.\nNotre équipe de SNC IFRI MARBRE prendra contact avec vous au ${clientPhone} sous peu.`);
     orderForm.reset();
     modelSelect.innerHTML = '<option value="">-- Sélectionner le type d\'abord --</option>';
-});
-
-// INTEGRATION INITIALE DU COMPOSANT DE LA MAP GOOGLE (STUB VISUEL INTEGRAL)
-function initMap() {
-    const defaultLocation = { lat: 36.6433, lng: 4.9086 }; // Coordonnées approximatives de Fenaïa Ilmaten / El Kseur
-    
-    // Vérification de la disponibilité de l'objet google (si le script externe charge)
-    if (typeof google !== 'undefined' && google.maps) {
-        const map = new google.maps.Map(document.getElementById("map"), {
-            zoom: 13,
-            center: defaultLocation,
-            mapId: "DEMO_MAP_ID", 
-        });
-        
-        new google.maps.Marker({
-            position: defaultLocation,
-            map: map,
-            title: "SNC IFRI MARBRE",
-        });
-    } else {
-        // Rendu de remplacement si l'API n'a pas pu charger hors ligne
-        document.getElementById('map').innerHTML = '<div style="padding: 20px; text-align: center;"><strong>[ Carte Google Maps Interactive ]</strong><br>SNC IFRI MARBRE<br>RN 26+ AVADOU, Fenaïa Ilmaten</div>';
-    }
-}
-
-// Lancement automatique du rendu stub de repli au cas où la commande defer n'exécute pas le callback hors connexion
-window.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-        if (document.getElementById('map').innerHTML === "") {
-            initMap();
-        }
-    }, 1000);
 });
