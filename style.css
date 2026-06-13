@@ -406,3 +406,33 @@ ul {
     border-top: 4px solid #0d47a1;
 }
 .main-footer .logo-text { color: #fff; }
+
+/* DESIGN DE LA CARTE IFRAME ET DU BOUTON D'ITINÉRAIRE */
+.map-iframe {
+    width: 100%; /* Prend toute la largeur de sa colonne */
+    height: 320px; /* Hauteur harmonieuse par rapport au formulaire d'à côté */
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-top: 10px;
+    display: block;
+}
+
+.btn-directions {
+    display: block;
+    text-align: center;
+    background-color: #0d47a1; /* Bleu identique à ton thème d'usine */
+    color: #ffffff !important;
+    padding: 12px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-top: 15px;
+    box-shadow: 0 2px 4px rgba(13, 71, 161, 0.15);
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.btn-directions:hover {
+    background-color: #0a3a85; /* Assombrissement subtil au survol */
+    transform: translateY(-1px);
+}
