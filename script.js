@@ -1,192 +1,131 @@
-// Mobile Menu
-const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-const mobileMenu = document.getElementById('mobileMenu');
-const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
-const mobileMenuClose = document.getElementById('mobileMenuClose');
-const mobileNavLinks = document.querySelectorAll('.mobile-nav-links a');
+// CONFIGURATION DES MODELES ET DIMENSIONS DISPONIBLES
+const productData = {
+    "lave-main": [
+        { value: "sharp-lm40", text: "Sharp LM 40 (400x225 mm)" },
+        { value: "sharp-lm50", text: "Sharp LM 50 (500x300 mm)" }
+    ],
+    "vasque": [
+        { value: "sharp-50", text: "Sharp 50 (505x380 mm)" },
+        { value: "sharp-60", text: "Sharp 60 (603x450 mm)" },
+        { value: "sharp-800", text: "Sharp 800 (805x485 mm)" },
+        { value: "sharp-80tb", text: "Sharp 80 TB (798x483 mm avec Tablette)" },
+        { value: "sharp-100", text: "Sharp 100 (1000x485 mm)" },
+        { value: "ocean-45", text: "Océan 45 cm" },
+        { value: "ocean-60", text: "Océan 60 cm" },
+        { value: "ocean-80", text: "Océan 80 cm" },
+        { value: "ocean-100", text: "Océan 100 cm" },
+        { value: "ocean-120-double", text: "Océan 120 cm - Double Vasque Exclusivité" }
+    ]
+};
 
-function openMobileMenu() {
-    mobileMenu.classList.add('active');
-    mobileMenuOverlay.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
+// DOM ELEMENTS
+const typeSelect = document.getElementById('formType');
+const modelSelect = document.getElementById('formModel');
+const orderForm = document.getElementById('orderForm');
+const promoCards = document.querySelectorAll('.promo-card');
+const orderButtons = document.querySelectorAll('.btn-order');
 
-function closeMobileMenu() {
-    mobileMenu.classList.remove('active');
-    mobileMenuOverlay.classList.remove('active');
-    document.body.style.overflow = '';
-}
-
-mobileMenuBtn.addEventListener('click', openMobileMenu);
-mobileMenuClose.addEventListener('click', closeMobileMenu);
-mobileMenuOverlay.addEventListener('click', closeMobileMenu);
-mobileNavLinks.forEach(link => link.addEventListener('click', closeMobileMenu));
-
-// Navbar Scroll Effect
-const navbar = document.getElementById('navbar');
-window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-        navbar.classList.add('scrolled');
+// GESTION DYNAMIQUE DU SELECT DU FORMULAIRE
+typeSelect.addEventListener('change', function() {
+    const selectedType = this.value;
+    
+    // Vider les options précédentes
+    modelSelect.innerHTML = '<option value="">-- Sélectionner le modèle --</option>';
+    
+    if (selectedType && productData[selectedType]) {
+        productData[selectedType].forEach(model => {
+            const option = document.createElement('option');
+            option.value = model.value;
+            option.textContent = model.text;
+            modelSelect.appendChild(option);
+        });
     } else {
-        navbar.classList.remove('scrolled');
+        modelSelect.innerHTML = '<option value="">-- Sélectionner le type d\'abord --</option>';
     }
 });
 
-// Active Nav Link
-const sections = document.querySelectorAll('section[id], div[id]');
-const navLinks = document.querySelectorAll('.nav-links a');
-
-window.addEventListener('scroll', () => {
-    let current = '';
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
-        if (scrollY >= sectionTop - 200) {
-            current = section.getAttribute('id');
-        }
-    });
-
-    navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href') === '#' + current) {
-            link.classList.add('active');
+// REDIRECTION ET PRE-REMPLISSAGE DEPUIS LES CARTES PROMO
+promoCards.forEach(card => {
+    card.addEventListener('click', function() {
+        const targetGroup = this.getAttribute('data-target');
+        const element = document.getElementById(targetGroup + '-group');
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
         }
     });
 });
 
-// Fade In Animation on Scroll
-const fadeElements = document.querySelectorAll('.fade-in');
-const fadeObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-        }
-    });
-}, { threshold: 0.1 });
-
-fadeElements.forEach(el => fadeObserver.observe(el));
-
-// Catalog Filter
-const catalogFilterBtns = document.querySelectorAll('.catalog-filters .filter-btn');
-const productCards = document.querySelectorAll('.product-card');
-
-catalogFilterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        catalogFilterBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const filter = btn.getAttribute('data-filter');
-
-        productCards.forEach(card => {
-            if (filter === 'all' || card.getAttribute('data-category') === filter) {
-                card.style.display = 'block';
-                setTimeout(() => {
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                }, 50);
-            } else {
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(20px)';
-                setTimeout(() => {
-                    card.style.display = 'none';
-                }, 300);
+// BOUTONS DE COMMANDE DU CATALOGUE
+orderButtons.forEach(btn => {
+    btn.addEventListener('click', function() {
+        const modelName = this.getAttribute('data-model');
+        const productType = this.getAttribute('data-type');
+        
+        // Défiler vers le formulaire
+        document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+        
+        // Sélectionner le type
+        typeSelect.value = productType;
+        // Déclencher manuellement l'événement change pour populer les modèles
+        typeSelect.dispatchEvent(new Event('change'));
+        
+        // Trouver et sélectionner l'option correspondante dans la liste des modèles
+        for (let i = 0; i < modelSelect.options.length; i++) {
+            if (modelSelect.options[i].text.includes(modelName)) {
+                modelSelect.selectedIndex = i;
+                break;
             }
-        });
+        }
     });
 });
 
-// Gallery Filter
-const galleryFilterBtns = document.querySelectorAll('.gallery-filters .filter-btn');
-const galleryItems = document.querySelectorAll('.gallery-item');
-
-galleryFilterBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-        galleryFilterBtns.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        const filter = btn.getAttribute('data-gallery-filter');
-
-        galleryItems.forEach(item => {
-            const categories = item.getAttribute('data-gallery');
-            if (filter === 'all' || categories.includes(filter)) {
-                item.style.display = 'block';
-                setTimeout(() => {
-                    item.style.opacity = '1';
-                    item.style.transform = 'scale(1)';
-                }, 50);
-            } else {
-                item.style.opacity = '0';
-                item.style.transform = 'scale(0.9)';
-                setTimeout(() => {
-                    item.style.display = 'none';
-                }, 300);
-            }
-        });
-    });
-});
-
-// Lightbox
-const lightbox = document.getElementById('lightbox');
-const lightboxImg = document.getElementById('lightboxImg');
-const lightboxClose = document.getElementById('lightboxClose');
-
-galleryItems.forEach(item => {
-    item.addEventListener('click', () => {
-        const img = item.querySelector('img');
-        lightboxImg.src = img.src;
-        lightbox.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    });
-});
-
-lightboxClose.addEventListener('click', () => {
-    lightbox.classList.remove('active');
-    document.body.style.overflow = '';
-});
-
-lightbox.addEventListener('click', (e) => {
-    if (e.target === lightbox) {
-        lightbox.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-});
-
-// Form Submission
-const estimateForm = document.getElementById('estimateForm');
-estimateForm.addEventListener('submit', (e) => {
+// SOUMISSION DU FORMULAIRE (SIMULATION)
+orderForm.addEventListener('submit', function(e) {
     e.preventDefault();
-    alert('Thank you for your estimation request. Our team will review your specifications and contact you within 24 hours.');
-    estimateForm.reset();
-});
-
-// File Input Change
-const fileInput = document.getElementById('fileInput');
-fileInput.addEventListener('change', (e) => {
-    if (e.target.files.length > 0) {
-        const fileName = e.target.files[0].name;
-        const uploadDiv = e.target.closest('.file-upload');
-        uploadDiv.querySelector('p').textContent = 'Selected: ' + fileName;
-        uploadDiv.style.borderColor = 'var(--brass)';
+    
+    const type = typeSelect.value;
+    const model = modelSelect.options[modelSelect.selectedIndex]?.text;
+    const clientName = document.getElementById('formClientName').value;
+    const clientPhone = document.getElementById('formClientPhone').value;
+    
+    if (!type || !modelSelect.value) {
+        alert('Veuillez sélectionner un type et un modèle de produit.');
+        return;
     }
+
+    alert(`Merci M./Mme ${clientName}.\nVotre demande d'achat pour le modèle d'usine [${model}] en finition Blanc Brillant a bien été enregistrée.\nNotre équipe de SNC IFRI MARBRE prendra contact avec vous au ${clientPhone} sous peu.`);
+    orderForm.reset();
+    modelSelect.innerHTML = '<option value="">-- Sélectionner le type d\'abord --</option>';
 });
 
-// Smooth Scroll for Anchor Links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
+// INTEGRATION INITIALE DU COMPOSANT DE LA MAP GOOGLE (STUB VISUEL INTEGRAL)
+function initMap() {
+    const defaultLocation = { lat: 36.6433, lng: 4.9086 }; // Coordonnées approximatives de Fenaïa Ilmaten / El Kseur
+    
+    // Vérification de la disponibilité de l'objet google (si le script externe charge)
+    if (typeof google !== 'undefined' && google.maps) {
+        const map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 13,
+            center: defaultLocation,
+            mapId: "DEMO_MAP_ID", 
+        });
+        
+        new google.maps.Marker({
+            position: defaultLocation,
+            map: map,
+            title: "SNC IFRI MARBRE",
+        });
+    } else {
+        // Rendu de remplacement si l'API n'a pas pu charger hors ligne
+        document.getElementById('map').innerHTML = '<div style="padding: 20px; text-align: center;"><strong>[ Carte Google Maps Interactive ]</strong><br>SNC IFRI MARBRE<br>RN 26+ AVADOU, Fenaïa Ilmaten</div>';
+    }
+}
+
+// Lancement automatique du rendu stub de repli au cas où la commande defer n'exécute pas le callback hors connexion
+window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        if (document.getElementById('map').innerHTML === "") {
+            initMap();
         }
-    });
-});
-
-// Parallax Effect for Hero
-window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const heroBg = document.querySelector('.hero-bg');
-    if (heroBg) {
-        heroBg.style.transform = `translateY(${scrolled * 0.5}px) scale(${1 + scrolled * 0.0001})`;
-    }
+    }, 1000);
 });
