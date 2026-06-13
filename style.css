@@ -370,15 +370,31 @@ ul {
 .address-box p { font-size: 0.95rem; color: #4a5568; }
 
 #map {
-    background-color: #e2e8f0;
-    height: 220px;
+    height: 350px; /* Légèrement agrandi pour une meilleure visibilité de la carte réelle */
+    width: 100%;
     border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #718096;
-    font-style: italic;
     border: 1px solid #cbd5e0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* BUTTON FOR DIRECTIONS */
+.btn-directions {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    background-color: #ff6d00; /* Utilisation de la couleur orange éclatante du logo */
+    color: #fff !important;
+    padding: 14px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    margin-top: 15px;
+    box-shadow: 0 4px 6px rgba(255, 109, 0, 0.15);
+    transition: background-color 0.2s, transform 0.2s;
+}
+.btn-directions:hover {
+    background-color: #e65100;
+    transform: translateY(-1px);
 }
 
 /* FOOTER */
@@ -390,34 +406,3 @@ ul {
     border-top: 4px solid #0d47a1;
 }
 .main-footer .logo-text { color: #fff; }
-
-/* DESIGN DE LA CARTE IFRAME ET DU BOUTON D'ITINÉRAIRE */
-.map-iframe {
-    width: 100%;
-    height: 350px; /* Donne une vraie hauteur visible à la carte */
-    border: 1px solid #cbd5e0;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    margin-top: 15px;
-    display: block;
-}
-}
-
-.btn-directions {
-    display: block;
-    text-align: center;
-    background-color: #0d47a1; /* Bleu identique à ton thème d'usine */
-    color: #ffffff !important;
-    padding: 12px;
-    border-radius: 4px;
-    font-weight: 600;
-    font-size: 0.95rem;
-    margin-top: 15px;
-    box-shadow: 0 2px 4px rgba(13, 71, 161, 0.15);
-    transition: background-color 0.2s, transform 0.2s;
-}
-
-.btn-directions:hover {
-    background-color: #0a3a85; /* Assombrissement subtil au survol */
-    transform: translateY(-1px);
-}

@@ -79,7 +79,7 @@ orderButtons.forEach(btn => {
     });
 });
 
-// SOUMISSION DU FORMULAIRE
+// SOUMISSION DU FORMULAIRE (SIMULATION)
 orderForm.addEventListener('submit', function(e) {
     e.preventDefault();
     
@@ -96,4 +96,51 @@ orderForm.addEventListener('submit', function(e) {
     alert(`Merci M./Mme ${clientName}.\nVotre demande d'achat pour le modèle d'usine [${model}] en finition Blanc Brillant a bien été enregistrée.\nNotre équipe de SNC IFRI MARBRE prendra contact avec vous au ${clientPhone} sous peu.`);
     orderForm.reset();
     modelSelect.innerHTML = '<option value="">-- Sélectionner le type d\'abord --</option>';
+});
+
+// INTEGRATION DE LA VÉRITABLE CARTE INTERACTIVE GOOGLE MAPS
+function initMap() {
+    // Coordonnées géographiques de Fenaïa Ilmaten, Béjaïa
+    const atelierLocation = { lat: 36.6502, lng: 4.8875 }; 
+    
+    if (typeof google !== 'undefined' && google.maps) {
+        // Initialisation de la carte Google Maps
+        const map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 14,
+            center: atelierLocation,
+            mapTypeControl: true,
+            zoomControl: true,
+            scaleControl: true,
+            streetViewControl: false
+        });
+        
+        // Création d'un marqueur personnalisé sur l'atelier
+        const marker = new google.maps.Marker({
+            position: atelierLocation,
+            map: map,
+            title: "SNC IFRI MARBRE",
+            animation: google.maps.Animation.DROP
+        });
+
+        // Bulle d'information au clic sur le marqueur
+        const infoWindow = new google.maps.InfoWindow({
+            content: '<div style="color:#1a202c; padding:5px;"><strong style="color:#0d47a1;">SNC IFRI MARBRE</strong><br>Fabrication de vasques et lave-mains<br>RN 26+, Fenaïa Ilmaten</div>'
+        });
+
+        marker.addListener("click", () => {
+            infoWindow.open(map, marker);
+        });
+    } else {
+        // Remplacement de secours (Iframe interactive standard Google Maps)
+        document.getElementById('map').innerHTML = `<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3202.4345224376485!2d4.885311!3d36.650222!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzbCsDM5JzAwLjgiTiA0wrA1MycxMy4xIkU!5e0!3m2!1sfr!2sdz!4v1718300000000!5m2!1sfr!2sdz" width="100%" height="100%" style="border:0; border-radius:8px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`;
+    }
+}
+
+// Déclenchement automatique
+window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        if (document.getElementById('map').innerHTML === "") {
+            initMap();
+        }
+    }, 500);
 });
